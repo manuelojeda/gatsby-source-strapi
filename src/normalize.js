@@ -13,7 +13,11 @@ const extractFields = async (apiURL, store, cache, createNode, touchNode, auth, 
       if (field !== null && has('mime', field)) {
         let fileNodeID
         // using field on the cache key for multiple image field
-        const mediaDataCacheKey = `strapi-media-${item.id}-${key}`
+
+        // we need to change instead of item.id to field.hash, the hash is unique and this won't repeat with any element.
+        //  this fixes the repeated item issue from #141 - This fix is based with  Jonathan_HETEAU discovery
+        // const mediaDataCacheKey = `strapi-media-${item.id}-${key}`
+        const mediaDataCacheKey = `strapi-media-${field.hash}-${key}`
         const cacheMediaData = await cache.get(mediaDataCacheKey)
 
         // If we have cached media data and it wasn't modified, reuse
